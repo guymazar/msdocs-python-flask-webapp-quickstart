@@ -24,6 +24,10 @@ module containerRegistry 'modules/container-registry.bicep' = {
     name: name
     location: location
     acrAdminUserEnabled: acrAdminUserEnabled
+    adminCredentialsKeyVaultResourceId: keyVault.outputs.id
+    adminCredentialsKeyVaultSecretUserName: 'acr-admin-username'
+    adminCredentialsKeyVaultSecretUserPassword1: 'acr-admin-password1'
+    adminCredentialsKeyVaultSecretUserPassword2: 'acr-admin-password2'
   }
 }
 
@@ -51,6 +55,23 @@ module appService 'modules/app-service.bicep' = {
     containerRegistryName: name
     containerRegistryImageName: containerRegistryImageName
     containerRegistryImageVersion: containerRegistryImageVersion
+  }
+}
+
+
+module keyVault 'modules/key-vault.bicep' = {
+  name: 'keyVaultDeployment'
+  params: {
+    name: '${name}-kv'
+    location: location
+    enableVaultForDeployment: true
+    roleAssignments: [
+      {
+        principalId: '7200f83e-ec45-4915-8c52-fb94147cfe5a'
+        roleDefinitionIdOrName: 'Key Vault Secrets User'
+        principalType: 'ServicePrincipal'
+      }
+    ]
   }
 }
 
