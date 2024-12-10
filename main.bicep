@@ -48,7 +48,7 @@ module appService 'modules/app-service.bicep' = {
     name: appServiceName
     location: location
     appServicePlanName: appServicePlan.name
-    containerRegistryName: containerRegistry.name
+    containerRegistryName: name
     containerRegistryImageName: containerRegistryImageName
     containerRegistryImageVersion: containerRegistryImageVersion
   }
