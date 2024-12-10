@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "namePrefix": {
+        "value": "GuyApp"
+      },
+      "location": {
+        "value": "northeurope"
+      },
+      "name": {
+        "value": "GuyAppRegistry"
+      },
+      "appServiceName": {
+        "value": "guyAppService"
+      },
+      "containerRegistryImageName": {
+        "value": "GuyAppRegistry"
+      },
+      "containerRegistryImageVersion": {
+        "value": "latest"
+      }
+    }
+}
