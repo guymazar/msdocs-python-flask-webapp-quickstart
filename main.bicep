@@ -18,6 +18,30 @@ param containerRegistryImageName string
 @description('The version/tag of the container image')
 param containerRegistryImageVersion string
 
+var acrUsernameSecretName = 'acr-admin-username'
+var acrPasswordSecretName = 'acr-admin-password1'
+var keyVaultName = '${name}-kv'
+
+module keyVault 'modules/key-vault.bicep' = {
+  name: 'keyVaultDeployment'
+  params: {
+    name: keyVaultName
+    location: location
+    enableVaultForDeployment: true
+    roleAssignments: [
+      {
+        principalId: '7200f83e-ec45-4915-8c52-fb94147cfe5a'
+        roleDefinitionIdOrName: 'Key Vault Secrets User'
+        principalType: 'ServicePrincipal'
+      }
+    ]
+  }
+}
+
+resource keyVaultResource 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
+  name: keyVaultName
+}
+
 module containerRegistry 'modules/container-registry.bicep' = {
   name: 'registry-deployment'
   params: {
@@ -25,8 +49,8 @@ module containerRegistry 'modules/container-registry.bicep' = {
     location: location
     acrAdminUserEnabled: acrAdminUserEnabled
     adminCredentialsKeyVaultResourceId: keyVault.outputs.id
-    adminCredentialsKeyVaultSecretUserName: 'acr-admin-username'
-    adminCredentialsKeyVaultSecretUserPassword1: 'acr-admin-password1'
+    adminCredentialsKeyVaultSecretUserName: acrUsernameSecretName
+    adminCredentialsKeyVaultSecretUserPassword1: acrPasswordSecretName
     adminCredentialsKeyVaultSecretUserPassword2: 'acr-admin-password2'
   }
 }
@@ -55,23 +79,9 @@ module appService 'modules/app-service.bicep' = {
     containerRegistryName: name
     containerRegistryImageName: containerRegistryImageName
     containerRegistryImageVersion: containerRegistryImageVersion
-  }
-}
-
-
-module keyVault 'modules/key-vault.bicep' = {
-  name: 'keyVaultDeployment'
-  params: {
-    name: '${name}-kv'
-    location: location
-    enableVaultForDeployment: true
-    roleAssignments: [
-      {
-        principalId: '7200f83e-ec45-4915-8c52-fb94147cfe5a'
-        roleDefinitionIdOrName: 'Key Vault Secrets User'
-        principalType: 'ServicePrincipal'
-      }
-    ]
+    dockerRegistryServerUrl: 'https://${containerRegistry.outputs.loginServer}'
+    dockerRegistryServerUserName: keyVaultResource.getSecret(acrUsernameSecretName)
+    dockerRegistryServerPassword: keyVaultResource.getSecret(acrPasswordSecretName)
   }
 }
 
