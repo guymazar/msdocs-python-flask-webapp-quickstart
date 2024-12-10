@@ -19,7 +19,7 @@ param containerRegistryImageName string
 param containerRegistryImageVersion string
 
 module containerRegistry 'modules/container-registry.bicep' = {
-  name: 'containerRegistryGuy'
+  name: 'registry-deployment'
   params: {
     name: name
     location: location
