@@ -39,6 +39,11 @@ module keyVault 'modules/key-vault.bicep' = {
         roleDefinitionIdOrName: 'Key Vault Secrets User'
         principalType: 'ServicePrincipal'
       }
+      {
+        principalId: '25d8d697-c4a2-479f-96e0-15593a830ae5'  // GitHub Actions Service Principal
+        roleDefinitionIdOrName: 'Key Vault Secrets User'
+        principalType: 'ServicePrincipal'
+      }
     ]
   }
 }
