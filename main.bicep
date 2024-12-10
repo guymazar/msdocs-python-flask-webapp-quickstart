@@ -34,6 +34,11 @@ module keyVault 'modules/key-vault.bicep' = {
         roleDefinitionIdOrName: 'Key Vault Secrets User'
         principalType: 'ServicePrincipal'
       }
+      {
+        principalId: 'f248a218-1ef9-47bf-9928-ae47093fd442'  // ARM Service Principal
+        roleDefinitionIdOrName: 'Key Vault Secrets User'
+        principalType: 'ServicePrincipal'
+      }
     ]
   }
 }
