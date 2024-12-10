@@ -94,7 +94,7 @@ jobs:
         run: echo "::set-output name=version::$(echo ${GITHUB_REF#refs/heads/})-$(date +'%Y.%m.%d.%H.%M')"
 
       - name: Build and push image
-        working-directory: ./msdocs-python-flask-webapp-quickstart
+        working-directory: .
         run: |
           docker build . -t ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_BASE_NAME }}:${{ steps.image-version.outputs.version }}
           docker build . -t ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_BASE_NAME }}:${{ github.ref_name }}-latest
