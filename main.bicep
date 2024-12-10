@@ -34,10 +34,8 @@ module appServicePlan 'modules/app-service-plan.bicep' = {
     name: 'appServicePlanJorge'
     location: location
     sku: {
-      name: 'Basic'
+      name: 'B1'
       capacity: 1
-      family: 'B'
-      size: 'B1'
       tier: 'Basic'
     }
   }
